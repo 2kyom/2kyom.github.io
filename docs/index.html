@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="2kyom의 데이터 분석 포트폴리오입니다. Python, SQL, 데이터 시각화 및 시계열 분석을 공부하고 있습니다.">
+  <title>2kyom | Data Analyst Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #121a2c;
+      --surface2: #192339;
+      --text: #f0f3ff;
+      --muted: #9ba8c2;
+      --purple: #a78bfa;
+      --cyan: #67e8f9;
+      --border: rgba(255,255,255,.09);
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", "Pretendard", sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -320px;
+      right: -250px;
+      width: 750px;
+      height: 750px;
+      background: radial-gradient(circle, rgba(126,87,245,.12), transparent 65%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    ::selection { background: var(--purple); color: #0b1020; }
+
+    .container {
+      width: min(var(--max), calc(100% - 48px));
+      margin-inline: auto;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,16,32,.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .logo span { color: var(--purple); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--purple); }
+
+    .github-nav {
+      padding: 10px 17px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 680px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 55px;
+      padding-block: 110px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 15px var(--cyan);
+    }
+
+    .hero h1 {
+      margin: 23px 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(46px, 6.5vw, 79px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -3.5px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(115deg, var(--purple), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-desc {
+      max-width: 470px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.95;
+      word-break: keep-all;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 35px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 21px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform .2s, background .2s;
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn-primary {
+      background: var(--purple);
+      color: #101327;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* CODE PANEL */
+    .code-panel {
+      overflow: hidden;
+      background: #111a2b;
+      border: 1px solid rgba(167,139,250,.22);
+      border-radius: 19px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.3);
+      transform: rotate(2deg);
+      transition: transform .35s;
+    }
+
+    .code-panel:hover { transform: rotate(0deg) translateY(-5px); }
+
+    .window-top {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 17px 20px;
+      background: #182238;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .red { background: #fb7185; }
+    .yellow { background: #fbbf24; }
+    .green { background: #34d399; }
+
+    .filename {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--muted);
+      font-family: monospace;
+    }
+
+    .code-panel pre {
+      margin: 0;
+      padding: 28px 23px;
+      color: #d6def1;
+      font-size: clamp(11px, 1.2vw, 13px);
+      line-height: 2;
+      overflow-x: auto;
+      font-family: Consolas, monospace;
+    }
+
+    .kw { color: #c4a5ff; }
+    .str { color: #8de7ba; }
+    .comment { color: #71809e; }
+    .fn { color: #78d7f3; }
+
+    .code-bottom {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font: 11px monospace;
+    }
+
+    /* SECTIONS */
+    section { padding-block: 95px; }
+
+    .section-head { margin-bottom: 35px; }
+
+    .section-kicker {
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      margin: 10px 0 13px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(29px, 4vw, 40px);
+      line-height: 1.25;
+      letter-spacing: -1.5px;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 24px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: var(--surface);
+    }
+
+    .about-card { padding: 34px; }
+
+    .about-card h3 {
+      margin: 0 0 18px;
+      font-size: 21px;
+    }
+
+    .about-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 2;
+      word-break: keep-all;
+    }
+
+    .highlight { color: var(--purple); font-weight: 700; }
+
+    .interest-card { padding: 30px; }
+
+    .interest-card h3 { margin-top: 0; font-size: 17px; }
+
+    .interest-item {
+      padding: 15px 0;
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      color: #dce3f6;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .interest-item:last-child { border: 0; }
+    .interest-icon { font-size: 20px; }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .skill-card {
+      padding: 27px 20px;
+      transition: transform .25s, border-color .25s;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(167,139,250,.55);
+    }
+
+    .skill-icon {
+      display: grid;
+      place-items: center;
+      width: 49px;
+      height: 49px;
+      margin-bottom: 23px;
+      border-radius: 13px;
+      font-size: 25px;
+      background: rgba(167,139,250,.1);
+    }
+
+    .skill-card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .skill-card p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .project-card {
+      overflow: hidden;
+      transition: transform .25s, border-color .25s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(167,139,250,.45);
+    }
+
+    .project-visual {
+      position: relative;
+      height: 215px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(140deg, #24204e, #152e49);
+    }
+
+    .project-visual.alt {
+      background: linear-gradient(140deg, #123c45, #252050);
+    }
+
+    .chart-bars {
+      height: 120px;
+      display: flex;
+      align-items: end;
+      gap: 10px;
+    }
+
+    .chart-bars span {
+      display: block;
+      width: 27px;
+      height: var(--h);
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--cyan), var(--purple));
+      opacity: .9;
+    }
+
+    .chart-line {
+      width: 75%;
+      height: 100px;
+      overflow: visible;
+    }
+
+    .chart-line polyline {
+      fill: none;
+      stroke: var(--cyan);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .chart-line circle { fill: var(--purple); }
+
+    .visual-label {
+      position: absolute;
+      top: 17px;
+      left: 20px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #d4d5fc;
+    }
+
+    .project-body { padding: 27px; }
+
+    .project-body h3 {
+      margin: 13px 0 10px;
+      font-size: 21px;
+    }
+
+    .project-body p {
+      min-height: 72px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+      word-break: keep-all;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 10px;
+      background: rgba(167,139,250,.1);
+      border: 1px solid rgba(167,139,250,.13);
+      border-radius: 7px;
+      color: #cbb9ff;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .project-link {
+      display: inline-flex;
+      gap: 7px;
+      margin-top: 24px;
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* CONTACT */
+    .contact-card {
+      padding: 65px 25px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at top, rgba(167,139,250,.15), transparent 60%),
+        var(--surface);
+    }
+
+    .contact-card h2 { margin-bottom: 20px; }
+
+    .contact-card p {
+      max-width: 480px;
+      margin: 0 auto 30px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* ANIMATION */
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-block: 95px 60px;
+      }
+
+      .code-panel {
+        width: 100%;
+        max-width: 600px;
+        transform: none;
+      }
+
+      .about-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .container { width: calc(100% - 36px); }
+
+      .nav { height: 66px; }
+      .nav-links { gap: 15px; }
+      .nav-links a { font-size: 11px; }
+      .nav-links a:nth-child(1),
+      .nav-links a:nth-child(2) { display: none; }
+      .github-nav { padding: 8px 10px; }
+
+      .hero { gap: 45px; padding-top: 85px; }
+      .hero h1 { letter-spacing: -2px; }
+      .hero-desc { font-size: 14px; }
+
+      section { padding-block: 70px; }
+      .skills-grid { gap: 11px; }
+      .skill-card { padding: 22px 16px; }
+
+      .projects-grid { grid-template-columns: 1fr; }
+      .about-card, .interest-card { padding: 25px; }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVIGATION -->
+  <header>
+    <nav class="nav container" aria-label="메인 메뉴">
+      <a href="#home" class="logo">2kyom<span>.</span></a>
+
+      <div class="nav-links">
+        <a href="#about">ABOUT</a>
+        <a href="#skills">SKILLS</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#contact">CONTACT</a>
+        <a class="github-nav"
+           href="https://github.com/2kyom"
+           target="_blank"
+           rel="noopener noreferrer">GitHub ↗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <div class="container">
+      <section class="hero" id="home">
+        <div>
+          <div class="eyebrow">Aspiring Data Analyst</div>
+
+          <h1>
+            Finding<br>
+            stories in<br>
+            <span class="gradient-text">data.</span>
+          </h1>
+
+          <p class="hero-desc">
+            안녕하세요! 데이터를 통해 의미 있는 패턴을 발견하고
+            인사이트를 만들어가는 예비 데이터 분석가
+            <strong>2kyom</strong>입니다.
+            <br><br>
+            Python과 SQL을 공부하며 주식 데이터,
+            시계열 분석, 데이터 시각화에 관심을 갖고 있습니다.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">
+              Explore Projects ↗
+            </a>
+            <a href="https://github.com/2kyom"
+               class="btn btn-outline"
+               target="_blank"
+               rel="noopener noreferrer">
+              View GitHub ↗
+            </a>
+          </div>
+        </div>
+
+        <div class="code-panel" aria-label="Python 코드 예시">
+          <div class="window-top">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="filename">hello_data.py</span>
+          </div>
+
+          <pre><code><span class="comment"># Welcome to my portfolio!</span>
+
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+analyst = {
+    <span class="str">"name"</span>: <span class="str">"2kyom"</span>,
+    <span class="str">"focus"</span>: [
+        <span class="str">"Data Analysis"</span>,
+        <span class="str">"Time Series"</span>,
+        <span class="str">"Stock Market"</span>
+    ],
+    <span class="str">"status"</span>: <span class="str">"Learning 🚀"</span>
+}
+
+<span class="kw">def</span> <span class="fn">my_goal</span>():
+    <span class="kw">return</span> <span class="str">"Turn data into insight"</span>
+
+<span class="fn">print</span>(my_goal())</code></pre>
+
+          <div class="code-bottom">
+            ● Python 3 &nbsp; | &nbsp; Ready to analyze
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">01 / ABOUT ME</div>
+          <h2>Curious by nature.<br>Driven by data.</h2>
+          <p class="section-desc">
+            숫자에 담긴 이야기를 찾고, 발견한 내용을 명확하게 전달하고 싶습니다.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <article class="card about-card reveal">
+            <h3>안녕하세요, 2kyom입니다 👋</h3>
+
+            <p>
+              데이터 분석을 공부하며 새로운 기술을 하나씩 익히고 있습니다.
+              단순히 코드를 작성하는 것을 넘어,
+              <span class="highlight">데이터가 무엇을 의미하는지</span>
+              이해하는 분석가로 성장하고 싶습니다.
+            </p>
+
+            <p>
+              현재 Python, Pandas, SQL과 기초 통계를 학습하고 있으며,
+              실제 데이터를 활용해 문제를 정의하고
+              시각적으로 설명하는 연습을 하고 있습니다.
+            </p>
+
+            <p>
+              특히 금융시장과 시계열 데이터처럼
+              시간에 따라 변화하는 현상에 관심이 많습니다.
+            </p>
+          </article>
+
+          <aside class="card interest-card reveal">
+            <h3>What interests me</h3>
+
+            <div class="interest-item">
+              <span class="interest-icon">📈</span>
+              Stock Market Analysis
+            </div>
+            <div class="interest-item">
+              <span class="interest-icon">⏱️</span>
+              Time Series Analysis
+            </div>
+            <div class="interest-item">
+              <span class="interest-icon">📊</span>
+              Data Visualization
+            </div>
+            <div class="interest-item">
+              <span class="interest-icon">🧩</span>
+              Problem Solving
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">02 / TECH STACK</div>
+          <h2>Tools I'm learning.</h2>
+          <p class="section-desc">
+            데이터 분석에 필요한 도구들을 학습하고 활용하고 있습니다.
+          </p>
+        </div>
+
+        <div class="skills-grid">
+          <article class="card skill-card reveal">
+            <div class="skill-icon">🐍</div>
+            <h3>Python</h3>
+            <p>데이터 처리 및 분석을 위한 프로그래밍</p>
+          </article>
+
+          <article class="card skill-card reveal">
+            <div class="skill-icon">📦</div>
+            <h3>Pandas / NumPy</h3>
+            <p>데이터 정제, 가공 및 수치 연산</p>
+          </article>
+
+          <article class="card skill-card reveal">
+            <div class="skill-icon">🗄️</div>
+            <h3>SQL</h3>
+            <p>데이터 조회와 집계 및 관계형 데이터베이스</p>
+          </article>
+
+          <article class="card skill-card reveal">
+            <div class="skill-icon">📉</div>
+            <h3>Statistics</h3>
+            <p>기초 통계와 데이터에 대한 해석</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">03 / SELECTED WORK</div>
+          <h2>Projects & Experiments.</h2>
+          <p class="section-desc">
+            데이터를 탐색하고 분석하며 쌓아가는 프로젝트 기록입니다.
+          </p>
+        </div>
+
+        <div class="projects-grid">
+          <!-- PROJECT 01 -->
+          <article class="card project-card reveal">
+            <div class="project-visual">
+              <span class="visual-label">PROJECT 001 · VISUALIZATION</span>
+
+              <div class="chart-bars" aria-hidden="true">
+                <span style="--h:65%"></span>
+                <span style="--h:90%"></span>
+                <span style="--h:73%"></span>
+                <span style="--h:100%"></span>
+                <span style="--h:55%"></span>
+                <span style="--h:78%"></span>
+                <span style="--h:43%"></span>
+                <span style="--h:68%"></span>
+              </div>
+            </div>
+
+            <div class="project-body">
+              <div class="tags">
+                <span class="tag">Tableau</span>
+                <span class="tag">Public Data</span>
+                <span class="tag">Visualization</span>
+              </div>
+
+              <h3>서울시 대기오염 데이터 분석</h3>
+              <p>
+                서울시 미세먼지 및 초미세먼지 데이터를 이용해
+                연도별 변화 추이, 자치구별 차이와
+                고농도 발생 패턴을 시각화한 프로젝트입니다.
+              </p>
+
+              <a class="project-link"
+                 href="https://github.com/2kyom"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                Explore GitHub ↗
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 02 -->
+          <article class="card project-card reveal">
+            <div class="project-visual alt">
+              <span class="visual-label">INTEREST AREA · TIME SERIES</span>
+
+              <svg class="chart-line"
+                   viewBox="0 0 350 120"
+                   role="img"
+                   aria-label="예시 시계열 그래프">
+                <line x1="0" y1="100" x2="350" y2="100"
+                      stroke="#52637f" stroke-dasharray="4 6"/>
+                <line x1="0" y1="60" x2="350" y2="60"
+                      stroke="#52637f" stroke-dasharray="4 6"/>
+                <line x1="0" y1="20" x2="350" y2="20"
+                      stroke="#52637f" stroke-dasharray="4 6"/>
+
+                <polyline points="
+                  0,90 30,72 60,83 90,48
+                  120,65 150,37 180,54
+                  210,25 240,40 270,15
+                  300,28 330,8
+                "/>
+
+                <circle cx="330" cy="8" r="6"/>
+              </svg>
+            </div>
+
+            <div class="project-body">
+              <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">Finance</span>
+                <span class="tag">Time Series</span>
+              </div>
+
+              <h3>주식 · 시계열 분석</h3>
+              <p>
+                금융 데이터와 시간에 따른 변화에 관심을 갖고
+                분석 방법을 학습하고 있습니다.
+                향후 관련 프로젝트를 추가할 예정입니다.
+              </p>
+
+              <a class="project-link"
+                 href="https://github.com/2kyom"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                Explore GitHub ↗
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <div class="card contact-card reveal">
+          <div class="section-kicker">04 / GET IN TOUCH</div>
+
+          <h2>Let's connect<span class="gradient-text">.</span></h2>
+
+          <p>
+            계속해서 배우고, 기록하고, 성장하고 있습니다.<br>
+            저의 학습 과정과 프로젝트는 GitHub에서 확인하실 수 있습니다.
+          </p>
+
+          <a href="https://github.com/2kyom"
+             class="btn btn-primary"
+             target="_blank"
+             rel="noopener noreferrer">
+            Visit my GitHub ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> 2kyom. All rights reserved.</span>
+      <span>Made with curiosity & coffee ☕</span>
+    </div>
+  </footer>
+
+  <script>
+    // 현재 연도 자동 표시
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    // 스크롤 진입 애니메이션
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.08 }
+      );
+
+      document.querySelectorAll(".reveal").forEach((element) => {
+        observer.observe(element);
+      });
+    } else {
+      document.querySelectorAll(".reveal").forEach((element) => {
+        element.classList.add("visible");
+      });
+    }
+  </script>
+</body>
+</html>
